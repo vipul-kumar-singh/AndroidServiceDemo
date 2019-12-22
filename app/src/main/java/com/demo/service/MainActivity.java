@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewThreadCount;
 
-    private MyService myService;
+    private MyIntentService myIntentService;
 
     private boolean isServiceBound;
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         textViewThreadCount = findViewById(R.id.randomNumberText);
 
-        serviceIntent = new Intent(getApplicationContext(), MyService.class);
+        serviceIntent = new Intent(getApplicationContext(), MyIntentService.class);
 
     }
 
@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
             serviceConnection = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    MyService.MyServiceBinder myServiceBinder = (MyService.MyServiceBinder) iBinder;
-                    myService = myServiceBinder.getService();
+                    MyIntentService.MyServiceBinder myServiceBinder = (MyIntentService.MyServiceBinder) iBinder;
+                    myIntentService = myServiceBinder.getService();
                     isServiceBound = true;
                 }
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRandomNumber() {
         if (isServiceBound){
-            textViewThreadCount.setText("Random no. : "+ myService.getRandomNumber());
+            textViewThreadCount.setText("Random no. : "+ myIntentService.getRandomNumber());
         }else {
             textViewThreadCount.setText("Service not Bound");
         }

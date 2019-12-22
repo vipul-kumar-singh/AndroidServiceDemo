@@ -1,6 +1,6 @@
 package com.demo.service;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Random;
 
-public class MyService extends Service {
+public class MyIntentService extends IntentService {
 
     private int randomNumber;
     private boolean isRandomGeneratorOn;
@@ -18,26 +18,23 @@ public class MyService extends Service {
     private final int MIN = 0;
     private final int MAX = 100;
 
+    public MyIntentService() {
+        super(MyIntentService.class.getSimpleName());
+    }
+
     class MyServiceBinder extends Binder{
-        public MyService getService(){
-            return MyService.this;
+        public MyIntentService getService(){
+            return MyIntentService.this;
         }
     }
 
     private IBinder binder = new MyServiceBinder();
 
-    //gets executed whenever you start a a service
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    protected void onHandleIntent(@Nullable Intent intent) {
         Log.i(getString(R.string.service_demo), "Service Started, thread id: " + Thread.currentThread().getId());
         isRandomGeneratorOn = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                startRandomGenerator();
-            }
-        }).start();
-        return START_STICKY;
+        startRandomGenerator();
     }
 
     @Nullable
